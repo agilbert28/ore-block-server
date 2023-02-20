@@ -1,0 +1,63 @@
+[22:09:07] [WARN] [Settings]: Failed to load server settings (this is normal if no settings have been set yet): java.nio.file.NoSuchFileException: serversettings.json
+[22:09:08] [INFO] [Startup]: Loaded config from /home/ubuntu/MusicBot/config.txt
+[22:09:09] [INFO] [JDA]: Login Successful!
+[22:09:09] [INFO] [WebSocketClient]: Connected to WebSocket
+[22:09:09] [INFO] [JDA]: Finished Loading!
+[22:09:09] [WARN] [MusicBot]: This bot is not on any guilds! Use the following link to add the bot to your guilds!
+[22:09:09] [WARN] [MusicBot]: https://discord.com/oauth2/authorize?client_id=948338614276874280&scope=bot&permissions=70642768
+[22:20:32] [WARN] [Settings]: Failed to load server settings (this is normal if no settings have been set yet): java.nio.file.NoSuchFileException: serversettings.json
+[22:20:32] [INFO] [Startup]: Loaded config from /home/ubuntu/MusicBot/config.txt
+[22:20:33] [INFO] [JDA]: Login Successful!
+[22:20:34] [INFO] [WebSocketClient]: Connected to WebSocket
+[22:20:34] [INFO] [JDA]: Finished Loading!
+[22:22:59] [WARN] [Settings]: Failed to load server settings (this is normal if no settings have been set yet): java.nio.file.NoSuchFileException: serversettings.json
+[22:23:00] [INFO] [Startup]: Loaded config from /home/ubuntu/MusicBot/config.txt
+[22:23:01] [INFO] [JDA]: Login Successful!
+[22:23:01] [INFO] [WebSocketClient]: Connected to WebSocket
+[22:23:01] [INFO] [JDA]: Finished Loading!
+[22:25:38] [WARN] [Settings]: Failed to load server settings (this is normal if no settings have been set yet): java.nio.file.NoSuchFileException: serversettings.json
+[22:25:38] [INFO] [Startup]: Loaded config from /home/ubuntu/MusicBot/config.txt
+[22:25:39] [INFO] [JDA]: Login Successful!
+[22:25:40] [INFO] [WebSocketClient]: Connected to WebSocket
+[22:25:40] [INFO] [JDA]: Finished Loading!
+[22:31:43] [WARN] [Settings]: Failed to load server settings (this is normal if no settings have been set yet): java.nio.file.NoSuchFileException: serversettings.json
+[22:31:43] [INFO] [Startup]: Loaded config from /home/ubuntu/MusicBot/config.txt
+[22:31:45] [INFO] [JDA]: Login Successful!
+[22:31:45] [INFO] [WebSocketClient]: Connected to WebSocket
+[22:31:45] [INFO] [JDA]: Finished Loading!
+[23:04:04] [WARN] [RateLimiter]: Encountered 429 on route PUT/channels/{channel_id}/messages/{message_id}/reactions/{reaction_code}/{user_id} with bucket d6b7697c78814ecd72bb20df05517c78:channel_id=882477477597970432 Retry-After: 1000 ms
+[23:04:05] [WARN] [RateLimiter]: Encountered 429 on route PUT/channels/{channel_id}/messages/{message_id}/reactions/{reaction_code}/{user_id} with bucket d6b7697c78814ecd72bb20df05517c78:channel_id=882477477597970432 Retry-After: 1000 ms
+[23:08:15] [ERROR] [LocalAudioTrackExecutor]: Error in playback of HLQ1cK9Edhc
+com.sedmelluq.discord.lavaplayer.tools.FriendlyException: Something broke when playing the track.
+	at com.sedmelluq.discord.lavaplayer.tools.ExceptionTools.wrapUnfriendlyExceptions(ExceptionTools.java:44)
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.execute(LocalAudioTrackExecutor.java:116)
+	at com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager.lambda$executeTrack$1(DefaultAudioPlayerManager.java:348)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+	Suppressed: com.sedmelluq.discord.lavaplayer.tools.exception.EnvironmentInformation: 
+  lavaplayer.version: 1.3.78
+  os.arch: aarch64
+  os.name: Linux
+  os.version: 5.13.0-1017-raspi
+  java.vendor: Private Build
+  java.version: 17.0.1
+  java.runtime.version: 17.0.1+12-Ubuntu-121.10
+  java.vm.version: 17.0.1+12-Ubuntu-121.10
+Caused by: java.lang.RuntimeException: Not success status code: 403
+	at com.sedmelluq.discord.lavaplayer.tools.io.PersistentHttpStream.validateStatusCode(PersistentHttpStream.java:87)
+	at com.sedmelluq.discord.lavaplayer.tools.io.PersistentHttpStream.attemptConnect(PersistentHttpStream.java:116)
+	at com.sedmelluq.discord.lavaplayer.tools.io.PersistentHttpStream.connect(PersistentHttpStream.java:105)
+	at com.sedmelluq.discord.lavaplayer.tools.io.PersistentHttpStream.internalRead(PersistentHttpStream.java:150)
+	at com.sedmelluq.discord.lavaplayer.tools.io.PersistentHttpStream.read(PersistentHttpStream.java:166)
+	at java.base/java.io.DataInputStream.readByte(DataInputStream.java:271)
+	at com.sedmelluq.discord.lavaplayer.container.matroska.format.MatroskaEbmlReader.readEbmlInteger(MatroskaEbmlReader.java:39)
+	at com.sedmelluq.discord.lavaplayer.container.matroska.format.MatroskaFileReader.readNextElement(MatroskaFileReader.java:45)
+	at com.sedmelluq.discord.lavaplayer.container.matroska.MatroskaStreamingFile.readFile(MatroskaStreamingFile.java:78)
+	at com.sedmelluq.discord.lavaplayer.container.matroska.MatroskaAudioTrack.loadMatroskaFile(MatroskaAudioTrack.java:51)
+	at com.sedmelluq.discord.lavaplayer.container.matroska.MatroskaAudioTrack.process(MatroskaAudioTrack.java:34)
+	at com.sedmelluq.discord.lavaplayer.track.DelegatedAudioTrack.processDelegate(DelegatedAudioTrack.java:25)
+	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack.processStatic(YoutubeAudioTrack.java:57)
+	at com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack.process(YoutubeAudioTrack.java:49)
+	at com.sedmelluq.discord.lavaplayer.track.playback.LocalAudioTrackExecutor.execute(LocalAudioTrackExecutor.java:104)
+	... 4 common frames omitted
