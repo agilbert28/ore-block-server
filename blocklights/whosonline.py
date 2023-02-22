@@ -29,7 +29,7 @@ dim = False
 # Set up Sunrise/Sunset Location
 location = LocationInfo(name = 'Detroit', region = 'USA', timezone = 'America/Detroit',
 						latitude = 44.953060, longitude = -89.614100)
-detroitTz = tz.gettz(tz="America/Detroit")
+detroitTz = tz.gettz("America/Detroit")
 
 # Every 10 seconds...
 while True:
