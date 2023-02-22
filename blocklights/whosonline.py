@@ -13,6 +13,7 @@ import time
 import board
 import adafruit_dotstar as dotstar
 from mcstatus import JavaServer
+from dateutil import tz
 from datetime import datetime
 from astral import LocationInfo
 from astral.sun import sun
@@ -28,6 +29,7 @@ dim = False
 # Set up Sunrise/Sunset Location
 location = LocationInfo(name = 'Detroit', region = 'USA', timezone = 'America/Detroit',
 						latitude = 44.953060, longitude = -89.614100)
+detroitTz = tz.gettz(tz="America/Detroit")
 
 # Every 10 seconds...
 while True:
@@ -40,7 +42,7 @@ while True:
 		s = sun(location.observer, date = datetime.today(), tzinfo = location.timezone)
 
 		# Check the Day of Week and Time
-		now = datetime.now().time()
+		now = datetime.now(tz=detroitTz).time()
 		day = datetime.today().weekday()
 
 		# Set to Dim between Sunset and Sunrise
