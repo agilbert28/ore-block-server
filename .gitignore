@@ -131,7 +131,6 @@ dmypy.json
 # User Added
 /pinecraft
 /minecraft
-/images
 /jmusicbot/config.txt
 .*
 !.* .gitignore
