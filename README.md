@@ -1,5 +1,5 @@
 # ore-block-server
-A Hobbyist Raspberry Pi Ubuntu server hosting a multiplayer Minecraft server and Discord music bot all enclosed in a 3D-printed Minecraft Ore Block with player-count activated lights and CPU temperature-controlled fan speed.
+A Hobbyist Raspberry Pi Ubuntu server hosting a multiplayer Minecraft server and Discord music bot all enclosed in a 3D-printed Minecraft Ore Block with player-count activated lights, solar-illuminance regulated brightness, and CPU temperature-controlled fan speed.
 
 <div align="left">
     <a href="https://github.com/agilbert28/ore-block-server">
