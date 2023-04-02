@@ -10,6 +10,7 @@ Created by Austin Gilbert for the Boys.
 
 import sys
 import logging
+from logging.handlers import RotatingFileHandler
 import subprocess
 import time
 import board
@@ -43,10 +44,11 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler("debug.log"),
+        RotatingFileHandler("debug.log", maxBytes=10485760, backupCount=5),
         logging.StreamHandler(sys.stdout)
     ]
 )
+
 logging.info(f'Starting Program with coordinates {coordinates}, elivation {elivation} m, and timezone {timezone}...')
 
 # Set up Server
