@@ -13,10 +13,26 @@ import time
 import board
 import adafruit_dotstar as dotstar
 from mcstatus import JavaServer
-from dateutil import tz
-from datetime import datetime
 from astral import LocationInfo
 from astral.sun import sun
+import pvlib
+from pvlib.irradiance import disc
+import datetime as dt
+from dateutil import tz
+import pandas as pd
+import numpy as np
+import requests
+
+# Editable Global Variables
+coordinates = (42.53947240410033,
+               -83.21562708740335) # Birmingham, MI
+elivation = 237.0 #float
+timezone = 'America/Detroit'
+
+# Default Values
+cloudCover = 0
+temperature = 12
+pressure = 0
 
 # Set up Server
 server = JavaServer('10.0.0.247', 25565)
@@ -25,64 +41,90 @@ server = JavaServer('10.0.0.247', 25565)
 dots = dotstar.DotStar(board.SCK, board.MOSI, 25, brightness = 0.2)
 dots.fill((0, 0, 0))
 dim = False
+brightness = 0.2
 
-# Set up Sunrise/Sunset Location
-location = LocationInfo(name = 'Detroit', region = 'USA', timezone = 'America/Detroit',
-						latitude = 44.953060, longitude = -89.614100)
-detroitTz = tz.gettz("America/Detroit")
+location = pvlib.location.Location(coordinates[0], coordinates[1], timezone, elivation)
+localTz = tz.gettz(timezone)
 
 # Every 10 seconds...
 while True:
 
 	# While the Minecraft Server is running...
-	if subprocess.check_output('screen -ls | { egrep -c "Pinecraft" || true; }',
-	shell = True).strip().decode('utf-8') == '1':
+	try:
+		if subprocess.check_output('screen -ls | { egrep -c "Pinecraft" || true; }',
+		shell = True).strip().decode('utf-8') == '1':
 
-		# Check today's Sunrise/Sunset
-		s = sun(location.observer, date = datetime.today(), tzinfo = location.timezone)
+			api = f'https://api.openweathermap.org/data/2.5/weather?lat={coordinates[0]}&lon={coordinates[1]}&units=metric&appid=c38c04c4dfbd1f8a5710153012af6ae2'
+			response = requests.get(api)
+			try:
+				data = response.json()
 
-		# Check the Day of Week and Time
-		now = datetime.now(tz=detroitTz).time()
-		day = datetime.today().weekday()
+				main = data['main']
+				temperature = main['temp']
+				pressure = main['pressure'] * 100
 
-		# Set to Dim between Sunset and Sunrise
-		dim = (now > s['sunset'].time()) or (now < s['sunrise'].time())
+				clouds = data['clouds']
+				cloudCover = clouds['all'] / 100
 
-		# Display Number of Players & Latency
-		players = server.status().players.online
-		print(f'Players Online: {players}  Latency: {server.status().latency} ms')
-		if players > 0:
-			print(', '.join(server.query().players.names))
+				print(f"Temperature: {temperature}*C")
+				print(f"Pressure: {pressure} Pa")
+				print(f"Cloud Cover: {cloudCover * 100}%")
+			except:
+				print("Error in the HTTP request")
 
-		# If Someone is Online...
-		if players > 0 and (day == 6 or day == 7):
-			# Increase the Brightness
-			dots.fill((255, 0, 0))
-			if dim:
-				dots.brightness = 0.1
+			# Check the Day of Week and Time
+			localTz = tz.gettz(timezone)
+			now = dt.datetime.now(tz=localTz)
+			nowIndex = pd.DatetimeIndex([now])
+			print(now)
+			day = dt.datetime.today().weekday()
+
+			# Illuminance/Irradiance Calculations
+			location = pvlib.location.Location(coordinates[0], coordinates[1], timezone, elivation)
+			solpos = location.get_solarposition(now, pressure, temperature)
+			cs = location.get_clearsky(nowIndex, solar_position=solpos)
+			ghi = (0.35 + (1 - 0.35) * (1 - cloudCover)) * cs['ghi'][0]
+			dni = disc(ghi, solpos['zenith'], cloudCover)['dni']
+			dhi = ghi - dni * np.cos(np.radians(solpos['zenith']))
+			irradiance = pvlib.irradiance.get_total_irradiance(0, 90, solpos['zenith'][0], solpos['azimuth'][0], dni, ghi, dhi, dni_extra=1.2, surface_type='urban')
+			totalIrradiance = irradiance['poa_global'][0] + 1
+			print(f"Total Irradiance: {totalIrradiance} W/m2")
+
+			# Match Brightness to Irradiance
+			if totalIrradiance < 7:
+				brightness = 0.01
+			elif totalIrradiance > 700:
+				brightness = 1
 			else:
-				dots.brightness = 0.9
+				brightness = totalIrradiance / 700
+			dots.brightness = brightness
 
-		elif players > 0:
-			dots.fill((64, 255, 255))
-			if dim:
-				dots.brightness = 0.1
+			# Display Number of Players & Latency
+			players = server.status().players.online
+			print(f'Players Online: {players}  Latency: {server.status().latency} ms')
+			if players > 0:
+				print(', '.join(server.query().players.names))
+
+			# If Someone is Online...
+			if players > 0:
+				# Turn Red
+				dots.fill((255, 0, 0))
+			# If Someone is not Online...
 			else:
-				dots.brightness = 0.9
-				
-		# If Someone is not Online...
+				# Turn Cyan
+				dots.fill((64, 255, 255))
+
+		# Otherwise...		
 		else:
-			# Lower the Brightness
-			dots.fill((64, 255, 255))
-			if dim:
-				dots.brightness = 0.01
-			else:
-				dots.brightness = 0.2
+			# Turn off
+			print('brightness = 0')
+			dots.fill((0, 0, 0))
 
-	# Otherwise...		
-	else:
+	except:
 		# Turn off
-		dots.fill((0, 0, 0))
+		print('brightness = 0')
+		print('Error')
+		# dots.fill((0, 0, 0))
 
-	dots.show()
+	# dots.show()
 	time.sleep(10)
